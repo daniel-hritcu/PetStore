@@ -3,14 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PetStore.MVC.Models
 {
-    public enum Breed
-    {
-        Dog,
-        Cat,
-        Fish,
-        Hamster,
-        GuineaPig
-    }
     public class Pet : DomainObject
     {
         [Required]
@@ -19,8 +11,17 @@ namespace PetStore.MVC.Models
         [Required]
         public DateTime DOB { get; set; }
         [Required]
-        public Breed Breed { get; set; }
+        public Breeds Breed { get; set; }
         [Required]
         public Owner Owner { get; set; }
+
+        public enum Breeds
+        {
+            Dog,
+            Cat,
+            Fish,
+            Hamster,
+            GuineaPig
+        }
     }
 }
