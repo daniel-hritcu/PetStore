@@ -12,10 +12,7 @@ namespace PetStore.MVC.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Pet>()
-            .HasOne(p => p.Owner)
-            .WithMany(o => o.Pets);
-
+            modelBuilder.Entity<Owner>().HasMany(o => o.Pets);
             base.OnModelCreating(modelBuilder);
         }
 

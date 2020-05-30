@@ -22,7 +22,7 @@ namespace PetStore.MVC.Controllers
         // GET: Pets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pets.ToListAsync());
+            return View(await _context.Pets.Include(p => p.Owner).ToListAsync());
         }
 
         // GET: Pets/Details/5
@@ -33,7 +33,7 @@ namespace PetStore.MVC.Controllers
                 return NotFound();
             }
 
-            var pet = await _context.Pets
+            var pet = await _context.Pets.Include(p => p.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pet == null)
             {
@@ -44,8 +44,9 @@ namespace PetStore.MVC.Controllers
         }
 
         // GET: Pets/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Owners = await _context.Owners.ToListAsync();
             return View();
         }
 
@@ -54,7 +55,7 @@ namespace PetStore.MVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,DOB,Breed,Id")] Pet pet)
+        public async Task<IActionResult> Create([Bind("Name,DOB,Breed,Id,OwnerId")] Pet pet)
         {
             if (ModelState.IsValid)
             {
@@ -73,11 +74,15 @@ namespace PetStore.MVC.Controllers
                 return NotFound();
             }
 
-            var pet = await _context.Pets.FindAsync(id);
+            var pet = await _context.Pets.Include(p => p.Owner).FirstOrDefaultAsync(p => p.Id == (int)id);
+
             if (pet == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Owners = await _context.Owners.ToListAsync();
+
             return View(pet);
         }
 
@@ -86,7 +91,7 @@ namespace PetStore.MVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,DOB,Breed,Id")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,DOB,Breed,Id,OwnerId")] Pet pet)
         {
             if (id != pet.Id)
             {

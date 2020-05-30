@@ -1,8 +1,26 @@
-﻿@{
+﻿@model IEnumerable<PetStore.MVC.Models.Owner>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@foreach (var owner in Model)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <h3>@owner.FullName</h3>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @foreach (var pet in owner.Pets)
+                {
+                    <td>
+                        <h5>@pet.Name</h5><br />
+                        <img style="border-style: outset;" src=@($"images/{pet.Breed.ToString()}.jpg") alt="Pet Photo" />
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+}

@@ -21,7 +21,8 @@ namespace PetStore.MVC.Controllers
         // GET: Owners
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Owners.ToListAsync());
+            var owner = await _context.Owners.ToListAsync();
+            return View(owner);
         }
 
         // GET: Owners/Details/5
